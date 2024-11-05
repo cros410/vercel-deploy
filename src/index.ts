@@ -2,8 +2,7 @@ import express, { Response } from 'express';
 import dotenv from 'dotenv';
 import { sequelize } from './config/database';
 import { testConnection } from './utils/testConnection';
-import './models/relations'
-
+import './models/relations';
 dotenv.config();
 
 const app = express();
