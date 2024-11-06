@@ -1,21 +1,24 @@
-import express, { Response } from 'express';
+import express, {Application,Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { sequelize } from './config/database';
 import { testConnection } from './utils/testConnection';
 import './models/relations';
+import { router } from './routes/index.routes';
 dotenv.config();
 
-const app = express();
+const app:Application = express();
 const PORT = process.env.PORT || 8000;
 
 app.use(express.json());
 
-app.get("/", (res: Response) => {
+router(app);
+
+app.get("/", (req: Request, res: Response) => {
   res.send("¡Welcomeeeee");
 });
 
 
-const startServer = async (): Promise<void> => {
+const startServer = async () => {
   try {
     await testConnection();
     console.log("Database connected");

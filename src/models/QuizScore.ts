@@ -46,8 +46,8 @@ QuizScore.init({
 }
     , {
         sequelize,
-        modelName: "Module",
-        tableName: "module",
+        modelName: "QuizScore",
+        tableName: "quiz_score",
         timestamps: true,
     }
 );

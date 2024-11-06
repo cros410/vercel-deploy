@@ -21,12 +21,12 @@ Module.belongsTo(Path,{foreignKey: 'path_id'});
 
 //Reacion de muchos a muchos
 User.belongsToMany(Reward,{
-    through: 'user_rewards',
+    through: 'user_reward',
     foreignKey: 'user_id',
 })
 
 Reward.belongsToMany(User,{
-    through: 'user_rewards',
+    through: 'user_reward',
     foreignKey: 'reward_id',
 })
 //--------------------------
