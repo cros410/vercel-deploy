@@ -4,20 +4,18 @@ import { sequelize } from '../config/database';
 
 interface RewardAttributes {
     reward_id: number;
-    name: string;
-    image?: string;
-    points: number;
+    image: string;
+    required_points: number;
     state: 'unlocked' | 'locked'; 
     type: 'background' | 'avatar';
 }
 
-interface RewardCreationAttributes extends Optional<RewardAttributes, 'reward_id' | 'image'> {}
+interface RewardCreationAttributes extends Optional<RewardAttributes, 'reward_id'> {}
 
 class Reward extends Model<RewardAttributes, RewardCreationAttributes> implements RewardAttributes {
     public reward_id!: number; 
-    public name!: string;
-    public image?: string; 
-    public points!: number;
+    public image!: string; 
+    public required_points!: number;
     public state!: 'unlocked' | 'locked'; 
     public type!: 'background' | 'avatar'; 
 
@@ -32,15 +30,11 @@ Reward.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
         image: {
             type: DataTypes.STRING,
             allowNull: true,
         },
-        points: {
+        required_points: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },

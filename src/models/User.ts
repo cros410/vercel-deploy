@@ -1,7 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
-import { Reward } from './Reward';
-import { Assistant } from './Assistant';
 
 
 interface UserAttributes {
@@ -11,12 +9,12 @@ interface UserAttributes {
     age: number;
     country: string;
     password: string;
-    reward_id?: number;
-    assistant_id?: number;
     total_point?: number;
+    assistant_name: string;
+    assistant_image: string;
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'user_id' | 'reward_id' | 'assistant_id' | 'total_point'> { }
+interface UserCreationAttributes extends Optional<UserAttributes, 'user_id' | 'total_point'> { }
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
     public user_id!: number;
@@ -25,9 +23,9 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public age!: number;
     public country!: string;
     public password!: string;
-    public reward_id?: number;
-    public assistant_id?: number;
     public total_point?: number;
+    public assistant_name!: string;
+    public assistant_image!: string;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -60,24 +58,18 @@ User.init({
         type: DataTypes.STRING,
         allowNull: false
     },
-    reward_id: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: Reward,
-            key: 'reward_id'
-        }
-    },
-    assistant_id: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: Assistant,
-            key: 'assistant_id'
-        }
-    },
     total_point: {
         type: DataTypes.INTEGER,
         defaultValue: 0
     },
+    assistant_name: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    assistant_image: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
 
 },
     {
