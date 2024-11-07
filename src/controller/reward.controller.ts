@@ -18,7 +18,7 @@ try {
     const existingReward = await Reward.findOne({ where: { imageHash: hash } });
 
     if (existingReward) {
-       res.status(400).json({ error: "The image is already uploading as a reward" });
+       res.status(400).json({ error: "The image is already stored as a reward" });
        return
        
 }
