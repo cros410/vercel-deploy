@@ -36,5 +36,5 @@ export const finishQuiz = async (req: Request, res: Response) => {
     } catch (error) {
         console.error('Error al calcular el puntaje:', error);
         res.status(500).json({ error: 'Hubo un error al calcular el puntaje.' });
-    }
+    }
 };
