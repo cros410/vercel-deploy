@@ -5,6 +5,7 @@ import { sequelize } from '../config/database';
 interface RewardAttributes {
     reward_id: number;
     image: string;
+    imageHash:string;
     required_points: number;
     state?: 'unlocked' | 'locked'; 
     type: 'background' | 'avatar';
@@ -15,6 +16,7 @@ interface RewardCreationAttributes extends Optional<RewardAttributes, 'reward_id
 class Reward extends Model<RewardAttributes, RewardCreationAttributes> implements RewardAttributes {
     public reward_id!: number; 
     public image!: string; 
+    public imageHash!: string;
     public required_points!: number;
     public state?: 'unlocked' | 'locked'; 
     public type!: 'background' | 'avatar'; 
@@ -31,6 +33,10 @@ Reward.init(
             autoIncrement: true,
         },
         image: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        imageHash:{
             type: DataTypes.STRING,
             allowNull: true,
         },
