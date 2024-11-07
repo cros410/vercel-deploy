@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
-import { Question } from './question';
+import { Question } from './Question';
 
 interface OptionAttributes {
     option_id: number;

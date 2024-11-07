@@ -1,7 +1,7 @@
 
 import { Module } from "./Module";
 import { Path } from "./Path";
-import { QuizScore } from "./QuizScore";
+import { QuizCategory } from "./QuizCategory";
 import { Reward } from "./Reward";
 import { User } from "./User";
 import { UserPath } from "./UserPath";
@@ -12,7 +12,7 @@ export {
     User,
     Path,
     Module,
-    QuizScore,
+    QuizCategory,
     UserReward,
     UserPath
 }

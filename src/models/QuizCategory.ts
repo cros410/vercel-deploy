@@ -2,34 +2,34 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 import { User } from './User';
 
-interface QuizScoreAttributes {
-    score_id: number;
+interface QuizCategoryAttributes {
+    quiz_id: number;
     score: number;
     user_id: number;
-    quiz_category: string;
+    name: string;
 }
 
-interface QuizScoreCreationAttributes extends Optional<QuizScoreAttributes, 'score_id'> { }
+interface QuizCategoryCreationAttributes extends Optional<QuizCategoryAttributes, 'quiz_id'> { }
 
-class QuizScore extends Model<QuizScoreAttributes, QuizScoreCreationAttributes> implements QuizScoreAttributes {
-    public score_id!: number;
+class QuizCategory extends Model<QuizCategoryAttributes, QuizCategoryCreationAttributes> implements QuizCategoryAttributes {
+    public quiz_id!: number;
     public score!: number;
     public user_id!: number;
-    public quiz_category!: string;
+    public name!: string;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 }
 
-QuizScore.init({
-    score_id: {
+QuizCategory.init({
+    quiz_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
     score: {
         type: DataTypes.INTEGER,
-        defaultValue: 0,
+        allowNull: false,
     },
     user_id: {
         type: DataTypes.INTEGER,
@@ -38,7 +38,7 @@ QuizScore.init({
             key: 'user_id'
         }
     },
-    quiz_category: {
+    name: {
         type: DataTypes.STRING,
         allowNull: false,
     }
@@ -46,10 +46,10 @@ QuizScore.init({
 }
     , {
         sequelize,
-        modelName: "QuizScore",
-        tableName: "quiz_score",
+        modelName: "QuizCategory",
+        tableName: "quiz_category",
         timestamps: true,
     }
 );
 
-export { QuizScore }
+export { QuizCategory }
