@@ -20,7 +20,7 @@ Module.belongsTo(Path,{foreignKey: 'path_id'});
 QuizCategory.hasMany(Question,{foreignKey: 'quiz_id'});
 Question.belongsTo(QuizCategory,{foreignKey: 'quiz_id'});
 
-Question.hasMany(Option, { foreignKey: 'question_id' });
+Question.hasMany(Option, { foreignKey: 'question_id' , as: 'Options' });
 Option.belongsTo(Question, { foreignKey: 'question_id' });
 
 //Reacion de muchos a muchos
