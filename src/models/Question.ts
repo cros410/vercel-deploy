@@ -6,7 +6,7 @@ import { QuizCategory } from './QuizCategory';
 interface QuestionAttributes {
     question_id: number;
     question_text: string;
-    score_id: number;
+    quiz_id: number;
 }
 
 interface QuestionCreationAttributes extends Optional<QuestionAttributes, 'question_id'> { }
@@ -15,7 +15,7 @@ interface QuestionCreationAttributes extends Optional<QuestionAttributes, 'quest
 class Question extends Model<QuestionAttributes, QuestionCreationAttributes> implements QuestionAttributes {
     public question_id!: number;
     public question_text!: string;
-    public score_id!: number;
+    public quiz_id!: number;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -32,11 +32,11 @@ Question.init({
         type: DataTypes.STRING,
         allowNull: false,
     },
-    score_id: {
+    quiz_id: {
         type: DataTypes.INTEGER,
         references: {
             model: QuizCategory,
-            key: 'score_id'
+            key: 'quiz_id'
         }
     },
 }, {

@@ -47,16 +47,16 @@ export const generateQuizQuestions = async (quizCategory: string) => {
     try {
         const questions = JSON.parse(cleanedText);
 
-        const score_id = await getScoreIdByCategory(quizCategory);
-        if(!score_id){
-          throw new Error('No score_id found for category')
+        const quiz_id = await getScoreIdByCategory(quizCategory);
+        if(!quiz_id){
+          throw new Error('No quiz_id found for category')
         }
 
         for(const questionData of questions){
           const {question,options,correctAnswer} = questionData;
           const createQuestion = await Question.create({
             question_text:question,
-            score_id:score_id,
+            quiz_id:quiz_id,
           });
           for(let i=0;i<options.length;i++){
             const isCorrect = options[i] === correctAnswer;
