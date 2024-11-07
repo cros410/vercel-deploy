@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 import { QuizCategory } from './QuizCategory';
-
+import { Option } from './Option';
 
 interface QuestionAttributes {
     question_id: number;
@@ -20,6 +20,12 @@ class Question extends Model<QuestionAttributes, QuestionCreationAttributes> imp
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
+
+    public Options!: Option[];
+
+    static associate(models: any) {
+        Question.hasMany(models.Option, { foreignKey: 'question_id', as: 'Options' });
+    }
 }
 
 Question.init({
