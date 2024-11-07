@@ -1,5 +1,5 @@
-import { QuizScore } from "../models";
+import { QuizCategory } from "../models";
 
-export const saveQuizScore = async(score:number,userId:number,quizCategory:string) =>{
-    return await QuizScore.create({score,user_id:userId,quiz_category:quizCategory});
+export const saveQuizScore = async(score:number,userId:number,nameCategory:string) =>{
+    return await QuizCategory.create({score,user_id:userId,name:nameCategory});
 }

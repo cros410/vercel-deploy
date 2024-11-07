@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
-import { QuizScore } from './QuizScore';
+import { QuizCategory } from './QuizCategory';
 
 
 interface QuestionAttributes {
@@ -35,7 +35,7 @@ Question.init({
     score_id: {
         type: DataTypes.INTEGER,
         references: {
-            model: QuizScore,
+            model: QuizCategory,
             key: 'score_id'
         }
     },
