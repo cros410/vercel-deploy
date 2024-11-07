@@ -17,8 +17,8 @@ QuizCategory.belongsTo(User, { foreignKey: 'user_id' });
 Path.hasMany(Module,{foreignKey: 'path_id',})
 Module.belongsTo(Path,{foreignKey: 'path_id'});
 
-QuizCategory.hasMany(Question,{foreignKey: 'score_id'});
-Question.belongsTo(QuizCategory,{foreignKey: 'score_id'});
+QuizCategory.hasMany(Question,{foreignKey: 'quiz_id'});
+Question.belongsTo(QuizCategory,{foreignKey: 'quiz_id'});
 
 Question.hasMany(Option, { foreignKey: 'question_id' });
 Option.belongsTo(Question, { foreignKey: 'question_id' });
