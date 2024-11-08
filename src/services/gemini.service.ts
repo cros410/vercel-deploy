@@ -7,25 +7,25 @@ import { Question } from '../models/Question';
 
 dotenv.config();
 if (!process.env.GEMINI_API_KEY) {
-    throw new Error('La clave de API GEMINI_API_KEY no está definida en el archivo .env');
+  throw new Error('La clave de API GEMINI_API_KEY no está definida en el archivo .env');
 }
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-console.log("",process.env.GEMINI_API_KEY)
+console.log("", process.env.GEMINI_API_KEY)
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 
-export const getQuizIdByCategory = async (quizCategory: string): Promise<number | null> => {
-  const quizScore = await QuizCategory.findOne({
-      where: { name: quizCategory }
+export const getQuizIdByCategory = async (name: string): Promise<number | null> => {
+  const quizCategory = await QuizCategory.findOne({
+      where: { name }
   });
 
-  return quizScore ? quizScore.quiz_id : null;
+  return quizCategory ? quizCategory.quiz_id : null;
 }
 
-export const generateQuizQuestions = async (quizCategory: string) => {
+export const generateQuizQuestions = async (name: string, type: string, type_id: number) => {
 
-    const prompt = `
-    Genera 3 preguntas de trivia sobre el tema: ${quizCategory}.
+  const prompt = `
+    Genera 3 preguntas de trivia sobre el tema: ${name}.
     Cada pregunta debe tener 4 opciones de respuesta, con una marcada como la correcta.
     Formatea la respuesta en JSON con el siguiente formato:
     [
@@ -38,39 +38,41 @@ export const generateQuizQuestions = async (quizCategory: string) => {
     ]
   `;
 
-    const result = await model.generateContent([
-        { text: prompt }
-    ]);
-    const generatedText = result.response.text();
-    console.log(generatedText)
-    const cleanedText = generatedText.replace(/```json|```/g, '').trim();
-    try {
-        const questions = JSON.parse(cleanedText);
+  const result = await model.generateContent([
+    { text: prompt }
+  ]);
+  const generatedText = result.response.text();
+  console.log(generatedText)
+  const cleanedText = generatedText.replace(/json|/g, '').trim();
+  try {
+    const questions = JSON.parse(cleanedText);
 
-        const quiz_id = await getQuizIdByCategory(quizCategory);
-        if(!quiz_id){
-          throw new Error('No quiz_id found for category')
-        }
-
-        for(const questionData of questions){
-          const {question,options,correctAnswer} = questionData;
-          const createQuestion = await Question.create({
-            question_text:question,
-            quiz_id:quiz_id,
-          });
-          for(let i=0;i<options.length;i++){
-            const isCorrect = options[i] === correctAnswer;
-
-            await Option.create({
-              option_text:options[i],
-              question_id:createQuestion.question_id,
-              is_correct:isCorrect
-            })
-          }
-        }
-    } catch (error) {
-        console.error('Error parsing the model response:', error);
-        throw new Error('Error in the response format.');
+    const quiz_id = await getQuizIdByCategory(name);
+    if (!quiz_id) {
+      throw new Error('No quiz_id found for category')
     }
+
+    for (const questionData of questions) {
+      const { question, options, correctAnswer } = questionData;
+
+      const createQuestion = await Question.create({
+        question_text: question,
+        type: type,
+        type_id: type_id,
+      });
+      for (let i = 0; i < options.length; i++) {
+        const isCorrect = options[i] === correctAnswer;
+
+        await Option.create({
+          option_text: options[i],
+          question_id: createQuestion.question_id,
+          is_correct: isCorrect
+        })
+      }
+    }
+  } catch (error) {
+    console.error('Error parsing the model response:', error);
+    throw new Error('Error in the response format.');
+  }
 };
 
