@@ -5,7 +5,6 @@ import { User } from './User';
 interface QuizCategoryAttributes {
     quiz_id: number;
     score: number;
-    user_id: number;
     name: string;
 }
 
@@ -14,7 +13,6 @@ interface QuizCategoryCreationAttributes extends Optional<QuizCategoryAttributes
 class QuizCategory extends Model<QuizCategoryAttributes, QuizCategoryCreationAttributes> implements QuizCategoryAttributes {
     public quiz_id!: number;
     public score!: number;
-    public user_id!: number;
     public name!: string;
 
     public readonly createdAt!: Date;
@@ -30,13 +28,6 @@ QuizCategory.init({
     score: {
         type: DataTypes.INTEGER,
         allowNull: false,
-    },
-    user_id: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: User,
-            key: 'user_id'
-        }
     },
     name: {
         type: DataTypes.STRING,
