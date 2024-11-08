@@ -18,3 +18,8 @@ export interface IUser{
     assistant_name: string;
     assistant_image: string;
 }
+
+export interface DecodedToken{
+    user_id: number;
+    username: string;
+}
