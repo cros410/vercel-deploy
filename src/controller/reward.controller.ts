@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs-extra";
 import { Reward } from "../models";
 import crypto from "crypto";
+import { allRewardService } from "../services/reward.service";
 
 export const storeReward = async (req: Request, res: Response) => {
   const { required_points, type} = req.body;
@@ -41,3 +42,13 @@ try {
     res.status(500).json({ error: "Error saving image" });
   }
 };
+
+export const getAllReward = async(req: Request, res: Response) => {
+    try {
+        const rewardAll = await allRewardService();
+        res.status(200).json(rewardAll)
+    } catch (error: unknown) {
+        res.status(500).json({ message: 'An unexpected error has occurred' });
+    }
+}
+
