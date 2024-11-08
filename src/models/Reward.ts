@@ -7,18 +7,16 @@ interface RewardAttributes {
     image: string;
     imageHash:string;
     required_points: number;
-    state?: 'unlocked' | 'locked'; 
     type: 'background' | 'avatar';
 }
 
-interface RewardCreationAttributes extends Optional<RewardAttributes, 'reward_id'| 'state'> {}
+interface RewardCreationAttributes extends Optional<RewardAttributes, 'reward_id'> {}
 
 class Reward extends Model<RewardAttributes, RewardCreationAttributes> implements RewardAttributes {
     public reward_id!: number; 
     public image!: string; 
     public imageHash!: string;
     public required_points!: number;
-    public state?: 'unlocked' | 'locked'; 
     public type!: 'background' | 'avatar'; 
 
     public readonly createdAt!: Date; 
@@ -43,11 +41,6 @@ Reward.init(
         required_points: {
             type: DataTypes.INTEGER,
             allowNull: false,
-        },
-        state: {
-            type: DataTypes.ENUM('unlocked', 'locked'),
-            allowNull: false,
-            defaultValue: 'locked',
         },
         type: {
             type: DataTypes.ENUM('background', 'avatar'),

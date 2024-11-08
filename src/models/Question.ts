@@ -6,7 +6,8 @@ import { Option } from './Option';
 interface QuestionAttributes {
     question_id: number;
     question_text: string;
-    quiz_id: number;
+    type:string;
+    type_id:number;
 }
 
 interface QuestionCreationAttributes extends Optional<QuestionAttributes, 'question_id'> { }
@@ -15,7 +16,8 @@ interface QuestionCreationAttributes extends Optional<QuestionAttributes, 'quest
 class Question extends Model<QuestionAttributes, QuestionCreationAttributes> implements QuestionAttributes {
     public question_id!: number;
     public question_text!: string;
-    public quiz_id!: number;
+    public type!:string;
+    public type_id!:number;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -38,13 +40,14 @@ Question.init({
         type: DataTypes.STRING,
         allowNull: false,
     },
-    quiz_id: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: QuizCategory,
-            key: 'quiz_id'
-        }
+    type:{
+        type:DataTypes.STRING,
+        allowNull:false
     },
+    type_id:{
+        type:DataTypes.INTEGER,
+        allowNull:false
+    }
 }, {
     sequelize, modelName: 'Question', tableName: "question",
     timestamps: true,
