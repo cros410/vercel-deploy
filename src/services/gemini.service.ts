@@ -14,7 +14,7 @@ console.log("",process.env.GEMINI_API_KEY)
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 
-const getScoreIdByCategory = async (quizCategory: string): Promise<number | null> => {
+export const getQuizIdByCategory = async (quizCategory: string): Promise<number | null> => {
   const quizScore = await QuizCategory.findOne({
       where: { name: quizCategory }
   });
@@ -47,7 +47,7 @@ export const generateQuizQuestions = async (quizCategory: string) => {
     try {
         const questions = JSON.parse(cleanedText);
 
-        const quiz_id = await getScoreIdByCategory(quizCategory);
+        const quiz_id = await getQuizIdByCategory(quizCategory);
         if(!quiz_id){
           throw new Error('No quiz_id found for category')
         }

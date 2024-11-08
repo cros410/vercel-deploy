@@ -27,7 +27,9 @@ UserReward.init(
             references: {
                 model: User,
                 key: 'user_id'
-            }
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
         },
         reward_id: {
             type: DataTypes.INTEGER,
@@ -35,7 +37,9 @@ UserReward.init(
             references: {
                 model: Reward,
                 key: 'reward_id'
-            }
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
         }
     },
     {
