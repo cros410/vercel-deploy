@@ -3,6 +3,7 @@ import { quizCategoryRouter } from "./quizCategory.routes";
 import { userRouter } from "./user.routes";
 import { authRouter } from "./auth.routes";
 import { rewardRouter } from "./reward.routes";
+import { userRewardRouter } from "./userReward";
 
 function router(app: Application): void {
     const routes: Router = Router();
@@ -12,6 +13,8 @@ function router(app: Application): void {
     routes.use('/',userRouter);
     routes.use('/',authRouter);
     routes.use('/',rewardRouter)
+    routes.use('/',userRewardRouter)
+
 
   }
   
