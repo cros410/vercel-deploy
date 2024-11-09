@@ -9,7 +9,7 @@ import { router } from './routes/index.routes';
 dotenv.config();
 
 const app:Application = express();
-const PORT = process.env.PORT_INDEX || 8000;
+const PORT = process.env.PORT_INDEX || 3000;
 
 app.use(cors())
 app.use(express.json());
