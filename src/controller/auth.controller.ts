@@ -22,8 +22,8 @@ export const login = async (req: Request, res: Response) => {
         return ;
     }
     try {
-        const { user, token } = await authenticateUser(username,email, password);
-        res.status(200).json({ message: 'Successful login', user, token });
+        const { user, tokenUser } = await authenticateUser(username,email, password);
+        res.status(200).json({ message: 'Successful login', user, tokenUser });
     } catch (error:unknown) {
         if (error instanceof Error) {
             res.status(401).json({ message: error.message });
