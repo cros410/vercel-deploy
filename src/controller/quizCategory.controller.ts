@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-// import {
-//   calculateUserScore,
-// } from "../services/quizCategory.service";
-import { generateQuestionsByType, saveQuizScore } from "../services/quizCategory.service";
+import {
+  calculateUserScore,
+} from "../services/quizCategory.service";
+import { generateQuestionsByType, getAllQuizCategoriesService, saveQuizScore } from "../services/quizCategory.service";
 
 export const createQuizScore = async (req: Request, res: Response) => {
   const { score, name } = req.body;
@@ -18,11 +18,7 @@ export const createQuizScore = async (req: Request, res: Response) => {
     }
   }
 };
-// crear  las 6 categorias de quiz 
-// export const createQuizCategories = async (categories: QuizCategoryAttributes[]) => {
-//   const createdCategories = await QuizCategory.bulkCreate(categories);
-//   return createdCategories;
-// };
+
 
 export const getQuizQuestions = async (req: Request, res: Response) => {
   const { type, type_id } = req.params;
@@ -53,17 +49,48 @@ export const getQuizQuestions = async (req: Request, res: Response) => {
   }
 };
 
-// export const finishQuiz = async (req: Request, res: Response) => {
-//   const { name, userAnswers, user_id } = req.body;
+export const getAllQuizCategories = async (req: Request, res: Response) => {
+  try {
+    const categories = await getAllQuizCategoriesService();
+    res.status(200).json(categories);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(404).json({ message: error.message });
+    } else {
+      res.status(500).json({ error: 'Error al obtener las categorías de quiz.' });
+    }
+  }
+};
 
-//   try {
-//     const score = await calculateUserScore(name, userAnswers, user_id);
-//     res.json({ message: "Quiz finalizado", score });
-//   } catch (error) {
-//     console.error("Error al calcular el puntaje:", error);
-//     res.status(500).json({ error: "Hubo un error al calcular el puntaje." });
-//   }
-// };
+export const finishQuiz = async (req: Request, res: Response) => {
+  const { userAnswers} = req.body;
+  const { type, type_id } = req.params;
+  const { user_id } = req;
+  const numericId = parseInt(type_id);
+
+  if(!user_id || isNaN(user_id)){
+    res.status(400).json({ error: 'El ID del usuario no es válido.' });
+        return;
+  }
+  
+    if (isNaN(numericId)) {
+        res.status(400).json({ error: 'El ID proporcionado no es un número válido.' });
+        return;
+    }
+  if(!type_id || !userAnswers || !type || userAnswers.length === 0  ) {
+      res.status(400).json ({ error: 'Faltan datos para finalizar el quiz.' });
+  }
+
+  try {
+    const score = await calculateUserScore(type, numericId, userAnswers, user_id);
+    
+
+    res.json({ message: "Quiz finalizado", score });
+  } catch (error) {
+    console.error("Error al calcular el puntaje:", error);
+    res.status(500).json({ error: "Hubo un error al calcular el puntaje." });
+  }
+};
 
 // export const updateQuizScore = async (req: Request, res: Response) => {
 //   const { user_id, name, score } = req.body;

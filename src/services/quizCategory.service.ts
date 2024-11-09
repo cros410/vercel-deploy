@@ -1,9 +1,5 @@
-import { QuizCategory, Module } from "../models";
+import { QuizCategory, Module, Question, Option, User } from "../models";
 import { generateQuizQuestions } from "./gemini.service";
-// import { getQuizIdByCategory } from "./gemini.service";
-
-
-
 
 export const saveQuizScore = async (score: number, nameCategory: string) => {
     const existingScore = await QuizCategory.findOne({ where: { name: nameCategory } });
@@ -33,48 +29,59 @@ export const generateQuestionsByType = async (type: string, id: number) => {
     await generateQuizQuestions(name, type, id);
 };
 
-//get total point quiz
-// export const getQuizScoreByCategory = async (quizCategory: string): Promise<number> => {
-//     const quiz = await QuizCategory.findOne({
-//         where: { name: quizCategory },
-//         attributes: ['score']
-//     });
+export const getAllQuizCategoriesService = async () => {
+    return await QuizCategory.findAll();
+};
 
-//     if (!quiz) throw new Error('Quiz category not found');
+export const calculateUserScore = async (type: string, type_id: number, userAnswers: { question_id: number, answer: number }[], user_id: number) => {
+    
+    let quizScore: number;
+    if (type === 'category') {
+        const quizCategory = await QuizCategory.findByPk(type_id);
+        if (!quizCategory) {
+            throw new Error('Categoría no encontrada');
+        }
+        quizScore = quizCategory.score;
+    } else if (type === 'module') {
+        const module = await Module.findByPk(type_id);
+        if (!module) {
+            throw new Error('Módulo no encontrado');
+        }
+        quizScore = module.point;
+    } else {
+        throw new Error('Tipo inválido. Debe ser "category" o "module".');
+    }
 
-//     return quiz.score;
-// };
+    const questions = await Question.findAll({
+        where: { type, type_id },
+        include: [{ model: Option, as: 'Options' }]
+    });
 
-// export const calculateUserScore = async (quizCategory: string, userAnswers: { question_id: number, answer: string }[], user_id: number) => {
-//     const quizScore = await getQuizScoreByCategory(quizCategory);
-//     const quiz_id = await getQuizIdByCategory(quizCategory);
+    if(questions.length === 0) throw new Error ('No se encontraron preguntas para ese tipo id');
+    const pointsPerQuestion = quizScore / questions.length;
+    let totalScore = 0;
 
-//     if (!quiz_id) throw new Error('No quiz_id found for category');
+    // Validar respuestas
+    for (const userAnswer of userAnswers) {
+        const question = questions.find(question => question.question_id === userAnswer.question_id);
+        if (!question) continue;
+        const correctOption = question.Options.find(option => option.is_correct === true );
+        if(!correctOption){
+            console.error ('No se encontraron opciones correctas para la pregunta');
+            continue;
+        }
+        const selectOption = await Option.findByPk(userAnswer.answer);
+        if(selectOption?.option_id === correctOption.option_id) {
+            totalScore += pointsPerQuestion;
+        }
+    }
 
-//     const questions = await Question.findAll({
-//         where: { quiz_id }
-//     });
+    // Actualizar el total de puntos del usuario
+    const user = await User.findByPk(user_id);
+    if (user) {
+        user.total_point = (user.total_point || 0) + totalScore;
+        await user.save();
+    }
 
-//     const pointsPerQuestion = quizScore / questions.length;
-//     let totalScore = 0;
-
-//     // Validar respuestas
-//     for (const userAnswer of userAnswers) {
-//         const question = await Question.findByPk(userAnswer.question_id, {
-//             include: [{ model: Option, where: { is_correct: true }, as: 'Options' }]
-//         });
-
-//         if (question && question.Options[0].option_text === userAnswer.answer) {
-//             totalScore += pointsPerQuestion;
-//         }
-//     }
-
-//     // Actualizar el total de puntos del usuario
-//     const user = await User.findByPk(user_id);
-//     if (user) {
-//         user.total_point = (user.total_point || 0) + totalScore;
-//         await user.save();
-//     }
-
-//     return totalScore;
-// };
+    return totalScore;
+};
