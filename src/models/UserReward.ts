@@ -8,15 +8,17 @@ import { Reward } from './Reward';
 interface UserRewardAttributes {
     user_id:number;
     reward_id:number;
+    reward_type:string;
 }
 
-interface UserRewardCreationAttributes extends Optional<UserRewardAttributes, 'user_id'| 'reward_id'> { }
+interface UserRewardCreationAttributes extends Optional<UserRewardAttributes, 'user_id'| 'reward_id' | 'reward_type'> { }
 
 
 
 class UserReward extends Model<UserRewardAttributes,UserRewardCreationAttributes> implements UserRewardAttributes{
     public user_id!:number;
     public reward_id!:number;
+    public reward_type!:string;
 }
 
 UserReward.init(
@@ -40,6 +42,11 @@ UserReward.init(
             },
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE',
+        },
+        reward_type:{
+            type: DataTypes.STRING,
+            allowNull: false,
+
         }
     },
     {
