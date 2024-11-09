@@ -7,12 +7,12 @@ import { userRewardRouter } from "./userReward";
 import { pathRouter } from "./path.routes";
 
 function router(app: Application): void {
-    app.use('/api/', quizCategoryRouter);
-    app.use('/api/',userRouter);
-    app.use('/api/',authRouter);
-    app.use('/api/',rewardRouter)
-    app.use('/api/',userRewardRouter)
-    app.use('/api/',pathRouter)
+    app.use('/api/quiz-category', quizCategoryRouter);
+    app.use('/api/users',userRouter);
+    app.use('/api/auth',authRouter);
+    app.use('/api/rewards',rewardRouter)
+    app.use('/api/user-rewards',userRewardRouter)
+    app.use('/api/paths',pathRouter)
 
   }
   
