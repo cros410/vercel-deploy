@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs-extra";
 import { Reward } from "../models";
 import crypto from "crypto";
-import { allRewardService, getRewardbyId, updateDataReward } from "../services/reward.service";
+import { allRewardService, getRewardbyId, getUnlockedRewardsServices, updateDataReward } from "../services/reward.service";
 
 export const storeReward = async (req: Request, res: Response) => {
   const { required_points, type} = req.body;
@@ -79,6 +79,23 @@ export const updateDataRewardById = async(req: Request, res: Response) => {
             res.status(404).json({ message: "Reward not found" });
         }
     }catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
+export const  getUnlockedRewardsForUser = async(req: Request, res: Response) => {
+    const userId = parseInt(req.params.userId, 10);
+    console.log(userId)
+    try{
+        const rewardUnlocked = await getUnlockedRewardsServices(userId)
+        console.log(rewardUnlocked)
+        if(rewardUnlocked.length > 0){
+            res.status(200).json({ rewards: rewardUnlocked, message: "Rewards found successfully" });
+        }else{
+            res.status(404).json({ message: "No rewards unlocked for this user" });
+        }
+    }catch(error){
         console.error(error);
         res.status(500).json({ message: "Server error" });
     }
