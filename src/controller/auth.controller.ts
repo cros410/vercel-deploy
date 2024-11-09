@@ -17,6 +17,10 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
     const { username,email, password } = req.body;
+    if(!username || !email || !password){
+        res.status(400).json({ message: 'Please provide all required fields' });
+        return ;
+    }
     try {
         const { user, tokenUser } = await authenticateUser(username,email, password);
         res.status(200).json({ message: 'Successful login', user, tokenUser });

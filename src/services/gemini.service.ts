@@ -42,8 +42,8 @@ export const generateQuizQuestions = async (name: string, type: string, type_id:
     { text: prompt }
   ]);
   const generatedText = result.response.text();
-  console.log(generatedText)
-  const cleanedText = generatedText.replace(/json|/g, '').trim();
+  // console.log(generatedText)
+  const cleanedText = generatedText.replace(/```json|```/g, '').trim();
   try {
     const questions = JSON.parse(cleanedText);
 
