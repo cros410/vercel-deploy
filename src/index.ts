@@ -17,7 +17,7 @@ app.use(express.json());
 router(app);
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("¡Welcomeeeee");
+  res.send("¡Welcomeeeee to bloomme");
 });
 
 
