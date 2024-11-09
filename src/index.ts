@@ -5,18 +5,14 @@ import { testConnection } from './utils/testConnection';
 import cors from 'cors';
 import './models/relations';
 import { router } from './routes/index.routes';
-import { isAuthenticated } from './middleware/auth.middleware';
 
 dotenv.config();
-
-
 
 const app:Application = express();
 const PORT = process.env.PORT || 8000;
 
 app.use(cors())
 app.use(express.json());
-app.use(isAuthenticated)
 
 router(app);
 
