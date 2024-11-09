@@ -5,6 +5,7 @@ import { authRouter } from "./auth.routes";
 import { rewardRouter } from "./reward.routes";
 import { userRewardRouter } from "./userReward";
 import { pathRouter } from "./path.routes";
+import { chatRouter } from "./gemini.chat.routes";
 
 function router(app: Application): void {
     const routes: Router = Router();
@@ -15,7 +16,7 @@ function router(app: Application): void {
     routes.use('/',authRouter);
     routes.use('/',rewardRouter)
     routes.use('/',userRewardRouter)
-
+    routes.use('/',chatRouter)
     routes.use('/',pathRouter)
 
   }
