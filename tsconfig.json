@@ -110,6 +110,6 @@
       "@models/*": ["./models/*"]  // Si tienes una estructura con modelos
     }
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "./api/*.ts"],
   "exclude": ["node_modules"]
 }
