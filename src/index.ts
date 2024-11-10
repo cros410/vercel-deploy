@@ -9,7 +9,7 @@ import { router } from './routes/index.routes';
 dotenv.config();
 
 const app:Application = express();
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT_INDEX || 3000;
 
 app.use(cors())
 app.use(express.json());
@@ -38,3 +38,5 @@ const startServer = async () => {
 };
 
 startServer();
+
+export default app;
